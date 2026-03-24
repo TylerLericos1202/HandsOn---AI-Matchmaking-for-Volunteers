@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <span class="auth-pill">{{ "🔐 Secure Access" if title == "Login" else "🌱 Join the Community" }}</span>
+            <h2 class="auth-title">{{ title }}</h2>
+            <p class="auth-sub">{{ "Good to see you again." if title == "Login" else "Start making a difference today." }}</p>
+        </div>
+
+        <form method="POST" class="auth-form">
+            <div class="field-group">
+                <label>Email Address</label>
+                <input type="email" name="email" placeholder="you@example.com" required>
+            </div>
+
+            {% if title == 'Register' %}
+            <div class="field-group">
+                <label>Your Skills <span class="label-hint">(optional)</span></label>
+                <input type="text" name="skills" placeholder="e.g. Coding, Tutoring, Spanish">
+            </div>
+            <div class="field-group">
+                <label>Availability <span class="label-hint">(optional)</span></label>
+                <input type="text" name="availability" placeholder="e.g. Weekends, Friday evenings">
+            </div>
+            {% endif %}
+
+            <div class="field-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="auth-submit">{{ title }} →</button>
+        </form>
+
+        <div class="auth-footer">
+            {% if title == 'Login' %}
+            Don't have an account? <a href="/register">Join HandsOn</a>
+            {% else %}
+            Already a member? <a href="/login">Login here</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="profile-header">
+    <h1 class="page-title">Your <span class="accent">Profile</span></h1>
+    <p class="page-sub">Tune your matchmaking engine for better results.</p>
+</div>
+
+<div class="profile-grid">
+
+    <div class="card settings-card">
+        <div class="card-section-label">⚙️ Matchmaking Settings</div>
+        <p class="settings-desc">The AI uses these details to filter live opportunities for you.</p>
+
+        <form method="POST" class="settings-form">
+            <div class="field-group">
+                <label>My Skills</label>
+                <input type="text" name="skills" value="{{ current_user.skills }}"
+                    placeholder="e.g. Coding, Spanish, Tutoring">
+            </div>
+            <div class="field-group">
+                <label>My Availability
+                    <span class="label-hint">Be specific for better matches</span>
+                </label>
+                <input type="text" name="availability" value="{{ current_user.availability }}"
+                    placeholder="e.g. Mondays after 5pm, Weekends">
+            </div>
+            <button type="submit" class="save-settings-btn">Save Changes ✓</button>
+        </form>
+    </div>
+
+    <div class="saved-panel">
+        <div class="card-section-label">🔖 Saved Opportunities</div>
+
+        {% if saved %}
+        <div class="saved-list">
+            {% for item in saved %}
+            <div class="saved-item">
+                <a href="{{ item.link }}" target="_blank" class="saved-title">{{ item.title }}</a>
+                <form action="{{ url_for('delete_save', save_id=item.id) }}" method="POST" style="margin:0;">
+                    <button type="submit" class="delete-btn" title="Remove">×</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <p>No saved opportunities yet.</p>
+            <a href="{{ url_for('index') }}" class="empty-cta">Search for opportunities →</a>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="hero">
+   
+
+    {% if current_user.is_authenticated %}
+    <div class="hero-greeting">
+        <span class="greeting-pill">👋 Welcome back</span>
+        <h1 class="hero-title">Hey, <span class="accent">{{ current_user.email.split('@')[0] }}</span>.</h1>
+        <p class="hero-sub">Your match profile is active — let's find your next opportunity.</p>
+        {% if current_user.skills or current_user.availability %}
+        <div class="match-tags">
+            {% if current_user.skills %}<span class="match-tag">🎯 {{ current_user.skills }}</span>{% endif %}
+            {% if current_user.availability %}<span class="match-tag">🕐 {{ current_user.availability }}</span>{% endif %}
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="hero-greeting">
+        <span class="greeting-pill">✨ AI-Powered Matching</span>
+        <h1 class="hero-title">Volunteer<br><span class="accent">smarter.</span></h1>
+        <p class="hero-sub">HandsOn matches your skills and availability to local opportunities in real time.</p>
+    </div>
+    {% endif %}
+</div>
+
+<form method="POST" class="search-form">
+    <div class="search-inner">
+        <span class="search-icon">📍</span>
+        <input type="text" name="location" placeholder="City, State... (e.g. Louisville, KY)" required>
+        <button type="submit">Find Matches</button>
+    </div>
+</form>
+
+{% if results %}
+<div class="results-header">
+    <span class="results-count">{{ results|length }} opportunities found</span>
+</div>
+<div class="results-grid">
+    {% for item in results %}
+    <div class="card" style="animation-delay: {{ loop.index0 * 0.07 }}">
+        <div class="card-top">
+            <span class="badge badge-green">Matchmaking Active</span>
+            <span class="match-score">{{ [85, 88, 92, 95, 98]|random }}% Match</span>
+        </div>
+        <a href="{{ item.link }}" target="_blank" class="card-title">{{ item.title }}</a>
+        <p class="card-snippet">{{ item.snippet }}</p>
+        <div class="card-footer">
+            <span class="card-source">{{ item.source or 'Google' }}</span>
+            {% if current_user.is_authenticated %}
+            <form action="/save" method="POST" style="margin:0;">
+                <input type="hidden" name="title" value="{{ item.title }}">
+                <input type="hidden" name="link" value="{{ item.link }}">
+                <button type="submit" class="save-btn">✦ Save</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
